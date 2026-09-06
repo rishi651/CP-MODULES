@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dharohar 2025 — Cinematic Neon Reveal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+
+<style>
+    html,body {
+      height:100%; margin:0;
+    }
+    body {
+      display:flex; align-items:center; justify-content:center;
+      background:radial-gradient(circle at 20% 20%,#0f172a,#020617 60%);
+      font-family:'Orbitron','Poppins',sans-serif;
+      overflow:hidden; color:#fff;
+    }
+
+    .wrap {
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      width:100%; height:100%; cursor:pointer;
+      animation: zoom 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes zoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+
+    .title {
+      font-weight:800; font-size:12vmin;
+      letter-spacing:0.6vmin; display:flex; gap:0.6vmin;
+      align-items:center; justify-content:center;
+      text-transform:uppercase;
+      filter:drop-shadow(0 0 30px rgba(0,255,255,0.3));
+    }
+
+    .subtitle {
+      font-family:'Poppins',sans-serif;
+      font-weight:700;
+      font-size:5.5vmin; /* 🔥 increased from 4vmin */
+      margin-top:2vmin;
+      opacity:0;
+      background:linear-gradient(90deg,#00f5d4,#00bbf9,#9b5de5);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-transform:uppercase;
+      text-shadow:
+        0 0 10px rgba(0,255,255,0.6),
+        0 0 20px rgba(0,255,255,0.4),
+        0 0 40px rgba(0,200,255,0.2);
+      transform:translateY(20px);
+      transition:all 1s ease-out;
+      filter:drop-shadow(0 0 20px rgba(0,255,255,0.3));
+    }
+
+    .subtitle.visible {
+      opacity:1;
+      transform:translateY(0);
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+
+    .ch {
+      display:inline-block; opacity:0;
+      transform:translateY(30%) scale(0.8) rotateX(20deg);
+      background:linear-gradient(90deg,#00f5d4,#00bbf9,#9b5de5);
+      -webkit-background-clip:text;
+      background-clip:text; color:transparent;
+      text-shadow:
+        0 0 10px rgba(0,255,255,0.6),
+        0 0 20px rgba(0,255,255,0.4),
+        0 0 40px rgba(0,200,255,0.2);
+      animation: reveal 0.6s cubic-bezier(.2,.9,.3,1) both;
+      animation-delay: var(--d);
+    }
+
+    .ch.revealed {
+      opacity:1 !important; transform:none !important;
+      animation: glow 1.5s ease-in-out infinite alternate !important;
+    }
+
+    @keyframes reveal {
+      0% {opacity:0; transform:translateY(30%) scale(0.8) rotateX(20deg);}
+      60% {opacity:1; transform:translateY(-6%) scale(1.05);}
+      100% {opacity:1; transform:translateY(0) scale(1);}
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow:
+          0 0 8px rgba(0,255,255,0.4),
+          0 0 16px rgba(0,255,255,0.3),
+          0 0 24px rgba(0,200,255,0.2);
+      }
+      to {
+        text-shadow:
+          0 0 12px rgba(0,255,255,0.9),
+          0 0 24px rgba(0,255,255,0.6),
+          0 0 36px rgba(0,200,255,0.4);
+      }
+    }
+
+    @media(max-width:600px){
+      .title{font-size:16vmin;gap:1vmin;}
+      .subtitle{font-size:7vmin;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" title="Click to replay">
+    <div class="title" id="title"></div>
+    <div class="subtitle" id="subtitle">THE LEGACY CONTINUES</div>
+  </div>
+
+  <script>
+    const text = 'DHAROHAR 2025';
+    const container = document.getElementById('title');
+    const subtitle = document.getElementById('subtitle');
+
+    function build() {
+      container.innerHTML = '';  
+      subtitle.classList.remove('visible');
+      const chars = [...text];
+      const totalTime = 5;
+      const per = totalTime / Math.max(1, chars.length);
+
+      chars.forEach((ch, i) => {
+        if (ch === ' ') {
+          const spacer = document.createElement('span');
+          spacer.style.display = 'inline-block';
+          spacer.style.width = '0.6em';
+          container.appendChild(spacer);
+          return;
+        }
+        const span = document.createElement('span');
+        span.className = 'ch';
+        span.style.setProperty('--d', (i * per * 0.9).toFixed(3) + 's');
+        span.textContent = ch;
+        container.appendChild(span);
+      });
+
+      setTimeout(() => {
+        document.querySelectorAll('.ch').forEach(ch => ch.classList.add('revealed'));
+        subtitle.classList.add('visible'); // show subtitle
+      }, totalTime * 1000);
+    }
+
+    build();
+
+    document.querySelector('.wrap').addEventListener('click', () => {
+      build();
+      void container.offsetWidth;
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key.toLowerCase() === 'f') {
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen().catch(()=>{});
+        else
+          document.exitFullscreen().catch(()=>{});
+      }
+    });
+  </script>
+</body>
+</html>
